@@ -1,18 +1,33 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import Button from '../Button';
-
+import ToastVariants from '../Toast/ToastVariants';
 import styles from './ToastPlayground.module.css';
+import Toast from '../Toast';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
+  const [variant, setVariant] = useState('notice');
+  const [showToast, setShowToast] = useState(false);
+  const [message, setMessage] = useState('');
+  const variantSelected = useCallback((variant) => {
+    console.log("Variant", variant);
+    setVariant(variant);
+  }, []);
+  const dismissToast = useCallback((_) => {
+    console.log("Hide demo toast");
+    setShowToast(false);
+  }, []);
+
   return (
     <div className={styles.wrapper}>
       <header>
         <img alt="Cute toast mascot" src="/toast.png" />
         <h1>Toast Playground</h1>
       </header>
+
+      {showToast && <Toast variant={variant} message={message} />}
 
       <div className={styles.controlsWrapper}>
         <div className={styles.row}>
@@ -24,27 +39,12 @@ function ToastPlayground() {
             Message
           </label>
           <div className={styles.inputWrapper}>
-            <textarea id="message" className={styles.messageInput} />
+            <textarea id="message" value={message} onChange={(event) => setMessage(event.target.value)} className={styles.messageInput} />
           </div>
         </div>
 
         <div className={styles.row}>
-          <div className={styles.label}>Variant</div>
-          <div
-            className={`${styles.inputWrapper} ${styles.radioWrapper}`}
-          >
-            <label htmlFor="variant-notice">
-              <input
-                id="variant-notice"
-                type="radio"
-                name="variant"
-                value="notice"
-              />
-              notice
-            </label>
-
-            {/* TODO Other Variant radio buttons here */}
-          </div>
+          <ToastVariants variantSelectedCallback={variantSelected} />
         </div>
 
         <div className={styles.row}>
@@ -52,7 +52,7 @@ function ToastPlayground() {
           <div
             className={`${styles.inputWrapper} ${styles.radioWrapper}`}
           >
-            <Button>Pop Toast!</Button>
+            <Button onClick={() => setShowToast(true)}>Pop Toast!</Button>
           </div>
         </div>
       </div>
