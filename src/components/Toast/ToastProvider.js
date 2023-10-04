@@ -1,4 +1,5 @@
-import { createContext, useState, useCallback } from "react";
+import { createContext, useState, useCallback, useEffect } from "react";
+import useEscapeKey from "../../hooks/EscapeKey";
 
 export const ToastContext = createContext();
 
@@ -14,6 +15,7 @@ const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 export default function ToastProvider({ children }) {
     const [toasts, setToasts] = useState([]);
+    useEscapeKey(() => setToasts([]));
 
     const addToast = useCallback((newToast) => {
         setToasts(state => {

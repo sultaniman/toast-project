@@ -17,7 +17,7 @@ const ICONS_BY_VARIANT = {
   error: AlertOctagon,
 };
 
-export default function Toast({variant='notice', message, onDismiss}) {
+export default function Toast({ variant = 'notice', message, onDismiss }) {
   const ToastIcon = ICONS_BY_VARIANT[variant];
   return (
     <div className={`${styles.toast} ${styles[variant]}`}>
@@ -25,11 +25,15 @@ export default function Toast({variant='notice', message, onDismiss}) {
         <ToastIcon size={24} />
       </div>
       <p className={styles.content}>
+        <VisuallyHidden>{variant}</VisuallyHidden>
         {message}
       </p>
-      <button className={styles.closeButton} onClick={onDismiss}>
+      <button
+        className={styles.closeButton}
+        onClick={onDismiss}
+        aria-label="Dismiss message"
+        aria-live="off">
         <X size={24} />
-        <VisuallyHidden>Dismiss message</VisuallyHidden>
       </button>
     </div>
   );
